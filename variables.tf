@@ -14,6 +14,32 @@ variable "private_subnet_ids" {}
 variable "public_subnet_ids" {}
 variable "bastion_security_gp" {}
 
+#----------------------
+# EKS master
+#----------------------
+variable "eks_master_cluster_log_types" {
+  default = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+}
+
+variable "eks_master_endpoint_private_access" {
+  default = true
+}
+
+variable "eks_master_endpoint_public_access" {
+  default = true
+}
+
+variable "eks_master_platform_version" {
+  default = "1.13"
+}
+
+#----------------------
+# Cloudwatch Logs Group
+#----------------------
+variable "eks_master_log_retention_in_day" {
+  default = "30"
+}
+
 #------------------------------------------
 # Tagging
 #------------------------------------------
