@@ -14,6 +14,11 @@ variable "private_subnet_ids" {}
 variable "public_subnet_ids" {}
 variable "bastion_security_gp" {}
 
+#------------------------------------------
+# Cluster IAM Roles for access
+#------------------------------------------
+variable "aws_account_id" {}
+
 #----------------------
 # EKS master
 #----------------------
