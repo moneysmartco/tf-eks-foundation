@@ -16,6 +16,10 @@ output "control_plane_iam_role_arn" {
   value = "${aws_iam_role.eks_control_plane.arn}"
 }
 
+output "worker_node_iam_role_arn" {
+  value = "${aws_iam_role.eks_worker.arn}"
+}
+
 output "worker_node_instance_profile_name" {
   value = "${aws_iam_instance_profile.worker.name}"
 }
