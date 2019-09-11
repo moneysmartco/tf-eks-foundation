@@ -21,4 +21,6 @@ resource "aws_cloudwatch_log_group" "eks_master_log" {
   name = "/aws/eks/${var.project_name}-${var.env}/cluster"
 
   retention_in_days = "${var.eks_master_log_retention_in_day}"
+
+  tags = "${local.cloudwatch_log_group_tags}"
 }

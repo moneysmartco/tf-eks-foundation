@@ -93,7 +93,8 @@ locals {
   #------------------------------------------------------------
   # variables that will be mapped to the various resource block
   #------------------------------------------------------------
-  control_plane_security_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag, local.control_plane_security_group_name_tag)}"
+  cloudwatch_log_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag)}"
 
-  worker_node_security_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag, local.worker_node_security_group_name_tag)}"
+  control_plane_security_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag, local.control_plane_security_group_name_tag)}"
+  worker_node_security_group_tags   = "${merge(var.tags, local.k8s_tag, local.env_tag, local.worker_node_security_group_name_tag)}"
 }
