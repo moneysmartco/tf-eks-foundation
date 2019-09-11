@@ -6,6 +6,8 @@ resource "aws_iam_role" "eks_cluster_admin" {
   name_prefix = "${replace(format("%s-%s-admin", var.project_name, var.env), "/(.{0,31})(.*)/", "$1-")}"
   description = "IAM role for admin access in ${var.project_name}-${var.env} EKS cluster"
 
+  max_session_duration = "${var.cluster_role_max_session_duration}"
+
   assume_role_policy = "${data.aws_iam_policy_document.aws_user_assume_role_policy.json}"
 }
 
@@ -13,6 +15,8 @@ resource "aws_iam_role" "eks_cluster_readonly" {
   # IAM role prefix is 32 characters max
   name_prefix = "${replace(format("%s-%s-readonly", var.project_name, var.env), "/(.{0,31})(.*)/", "$1-")}"
   description = "IAM role for readonly access in ${var.project_name}-${var.env} EKS cluster"
+
+  max_session_duration = "${var.cluster_role_max_session_duration}"
 
   assume_role_policy = "${data.aws_iam_policy_document.aws_user_assume_role_policy.json}"
 }
