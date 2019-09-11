@@ -19,6 +19,11 @@ variable "bastion_security_gp" {}
 #------------------------------------------
 variable "aws_account_id" {}
 
+variable "cluster_role_max_session_duration" {
+  description = "Session duration for STS token accessing EKS cluster (default: 12 hours)"
+  default     = "43200"
+}
+
 #----------------------
 # EKS master
 #----------------------
