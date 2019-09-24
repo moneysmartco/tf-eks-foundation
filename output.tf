@@ -57,3 +57,7 @@ output "eks_master_platform_version" {
 output "eks_master_certificate_authority" {
   value = "${aws_eks_cluster.master.certificate_authority}"
 }
+
+output "eks_master_oidc_issuer" {
+  value = "${aws_eks_cluster.master.identity.0.oidc.0.issuer}"
+}
