@@ -58,6 +58,13 @@ output "eks_master_certificate_authority" {
   value = "${aws_eks_cluster.master.certificate_authority}"
 }
 
-output "eks_master_oidc_issuer" {
+output "eks_master_oidc_issuer_url" {
   value = "${aws_eks_cluster.master.identity.0.oidc.0.issuer}"
+}
+
+#------------------------------------------
+# OIDC Role
+#------------------------------------------
+output "eks_master_oidc_provider_role_arn" {
+  value = "${aws_iam_openid_connect_provider.eks_cluster.arn}"
 }
