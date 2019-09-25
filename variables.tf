@@ -50,6 +50,13 @@ variable "eks_master_log_retention_in_day" {
   default = "30"
 }
 
+#----------------------
+# OIDC Role
+#----------------------
+variable "eks_master_oidc_thumbprints" {
+  description = "Temporary variable for getting OIDC url ssl cert"
+}
+
 #------------------------------------------
 # Tagging
 #------------------------------------------
