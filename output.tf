@@ -1,4 +1,11 @@
 #------------------------------------------
+# General
+#------------------------------------------
+output "cluster_name" {
+  value = "${var.project_name}-${var.env}"
+}
+
+#------------------------------------------
 # Security Groups
 #------------------------------------------
 output "control_plane_security_group_id" {
@@ -58,13 +65,13 @@ output "eks_master_certificate_authority" {
   value = "${aws_eks_cluster.master.certificate_authority}"
 }
 
+#------------------------------------------
+# OIDC Role
+#------------------------------------------
 output "eks_master_oidc_issuer_url" {
   value = "${aws_eks_cluster.master.identity.0.oidc.0.issuer}"
 }
 
-#------------------------------------------
-# OIDC Role
-#------------------------------------------
 output "eks_master_oidc_provider_role_arn" {
   value = "${aws_iam_openid_connect_provider.eks_cluster.arn}"
 }
