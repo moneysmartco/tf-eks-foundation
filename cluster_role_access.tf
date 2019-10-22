@@ -8,7 +8,7 @@ resource "aws_iam_role" "eks_cluster_admin" {
 
   max_session_duration = "${var.cluster_role_max_session_duration}"
 
-  assume_role_policy = "${data.aws_iam_policy_document.aws_user_assume_role_policy.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role_trust_policy.json}"
 }
 
 resource "aws_iam_role" "eks_cluster_readonly" {
@@ -18,13 +18,13 @@ resource "aws_iam_role" "eks_cluster_readonly" {
 
   max_session_duration = "${var.cluster_role_max_session_duration}"
 
-  assume_role_policy = "${data.aws_iam_policy_document.aws_user_assume_role_policy.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.assume_role_trust_policy.json}"
 }
 
-#----------------------------------------------
-# Role policy document for aws user to assume
-#----------------------------------------------
-data "aws_iam_policy_document" "aws_user_assume_role_policy" {
+#------------------------------------------------------------------
+# Role policy document to set assume role trusted relationships
+#------------------------------------------------------------------
+data "aws_iam_policy_document" "assume_role_trust_policy" {
   statement {
     actions = ["sts:AssumeRole"]
 
@@ -65,4 +65,62 @@ resource "aws_iam_role_policy_attachment" "get_token_policy_to_admin" {
 resource "aws_iam_role_policy_attachment" "get_token_policy_to_readonly" {
   policy_arn = "${aws_iam_policy.eks_get_token_policy.arn}"
   role       = "${aws_iam_role.eks_cluster_readonly.name}"
+}
+
+#----------------------------------------------
+# IAM Group for assume role access
+#----------------------------------------------
+resource "aws_iam_group" "eks_cluster_admin_group" {
+  name = "${format("%s-%s-admin", var.project_name, var.env)}"
+  path = "/"
+}
+
+resource "aws_iam_policy_attachment" "eks_cluster_admin_group_policy_attachment" {
+  name       = ""
+  groups     = ["${aws_iam_group.group.name}"]
+  policy_arn = "${data.aws_iam_policy_document.assume_admin_role_policy.arn}"
+}
+
+resource "aws_iam_group" "eks_cluster_readonly_group" {
+  name = "${format("%s-%s-readonly", var.project_name, var.env)}"
+  path = "/"
+}
+
+#----------------------------------------------
+# Policy for assume role access on group
+#----------------------------------------------
+data "aws_iam_policy_document" "assume_admin_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    # Allow anyone from ${aws_account_id} to access
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.aws_account_id}:${aws_iam_role.eks_cluster_admin.arn}}"]
+    }
+  }
+}
+
+resource "aws_iam_policy" "assume_admin_role_policy" {
+  name = "${format("%s-%s-admin-switch-role", var.project_name, var.env)}"
+  path   = "/"
+  policy = "${data.aws_iam_policy_document.assume_admin_role_policy.json}"
+}
+
+data "aws_iam_policy_document" "assume_readonly_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    # Allow anyone from ${aws_account_id} to access
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.aws_account_id}:${aws_iam_role.eks_cluster_readonly.arn}}"]
+    }
+  }
+}
+
+resource "aws_iam_policy" "assume_readonly_role_policy" {
+  name = "${format("%s-%s-readonly-switch-role", var.project_name, var.env)}"
+  path   = "/"
+  policy = "${data.aws_iam_policy_document.assume_readonly_role_policy.json}"
 }
