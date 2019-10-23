@@ -47,7 +47,7 @@ output "eks_cluster_admin_group_name" {
 }
 
 output "eks_cluster_readonly_name" {
-  value = "${aws_iam_group.eks_cluster_admin_group.name}"
+  value = "${aws_iam_group.eks_cluster_readonly_group.name}"
 }
 
 #------------------------------------------

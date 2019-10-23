@@ -97,7 +97,7 @@ data "aws_iam_policy_document" "assume_admin_role_policy" {
   statement {
     effect = "Allow"
     actions = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::${var.aws_account_id}:role/${aws_iam_role.eks_cluster_admin.arn}"]
+    resources = ["${aws_iam_role.eks_cluster_admin.arn}"]
   }
 }
 
@@ -111,7 +111,7 @@ data "aws_iam_policy_document" "assume_readonly_role_policy" {
   statement {
     effect = "Allow"
     actions = ["sts:AssumeRole"]
-    resources = ["arn:aws:iam::${var.aws_account_id}:role/${aws_iam_role.eks_cluster_readonly.arn}"]
+    resources = ["${aws_iam_role.eks_cluster_readonly.arn}"]
   }
 }
 
