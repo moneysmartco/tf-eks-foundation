@@ -95,13 +95,9 @@ resource "aws_iam_group_policy_attachment" "eks_cluster_readonly_group_policy_at
 #----------------------------------------------
 data "aws_iam_policy_document" "assume_admin_role_policy" {
   statement {
+    effect = "Allow"
     actions = ["sts:AssumeRole"]
-
-    # Allow anyone from ${aws_account_id} to access
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.aws_account_id}:${aws_iam_role.eks_cluster_admin.arn}}"]
-    }
+    resources = ["arn:aws:iam::${var.aws_account_id}:role/${aws_iam_role.eks_cluster_admin.arn}"]
   }
 }
 
@@ -113,13 +109,9 @@ resource "aws_iam_policy" "assume_admin_role_policy" {
 
 data "aws_iam_policy_document" "assume_readonly_role_policy" {
   statement {
+    effect = "Allow"
     actions = ["sts:AssumeRole"]
-
-    # Allow anyone from ${aws_account_id} to access
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.aws_account_id}:${aws_iam_role.eks_cluster_readonly.arn}}"]
-    }
+    resources = ["arn:aws:iam::${var.aws_account_id}:role/${aws_iam_role.eks_cluster_readonly.arn}"]
   }
 }
 
