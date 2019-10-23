@@ -42,6 +42,14 @@ output "eks_cluster_readonly_role_arn" {
   value = "${aws_iam_role.eks_cluster_readonly.arn}"
 }
 
+output "eks_cluster_admin_group_name" {
+  value = "${aws_iam_group.eks_cluster_admin_group.name}"
+}
+
+output "eks_cluster_readonly_name" {
+  value = "${aws_iam_group.eks_cluster_readonly_group.name}"
+}
+
 #------------------------------------------
 # EKS control plane
 #------------------------------------------
