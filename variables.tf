@@ -24,6 +24,18 @@ variable "cluster_role_max_session_duration" {
   default     = "43200"
 }
 
+variable "eks_cluster_admin_group_member" {
+  description = "Users that will be added to the group to grant admin access to kubectl"
+  type = "list"
+  default = []
+}
+
+variable "eks_cluster_readonly_group_member" {
+  description = "Users that will be added to the group to grant readonly access to kubectl" 
+  type = "list"
+  default = []
+}
+
 #----------------------
 # EKS master
 #----------------------

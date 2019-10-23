@@ -75,15 +75,19 @@ resource "aws_iam_group" "eks_cluster_admin_group" {
   path = "/"
 }
 
-resource "aws_iam_policy_attachment" "eks_cluster_admin_group_policy_attachment" {
-  name       = ""
-  groups     = ["${aws_iam_group.group.name}"]
-  policy_arn = "${data.aws_iam_policy_document.assume_admin_role_policy.arn}"
+resource "aws_iam_group_policy_attachment" "eks_cluster_admin_group_policy_attachment" {
+  group      = "${aws_iam_group.eks_cluster_admin_group.name}"
+  policy_arn = "${aws_iam_policy.assume_admin_role_policy.arn}"
 }
 
 resource "aws_iam_group" "eks_cluster_readonly_group" {
   name = "${format("%s-%s-readonly", var.project_name, var.env)}"
   path = "/"
+}
+
+resource "aws_iam_group_policy_attachment" "eks_cluster_readonly_group_policy_attachment" {
+  group      = "${aws_iam_group.eks_cluster_readonly_group.name}"
+  policy_arn = "${aws_iam_policy.assume_readonly_role_policy.arn}"
 }
 
 #----------------------------------------------
@@ -123,4 +127,24 @@ resource "aws_iam_policy" "assume_readonly_role_policy" {
   name = "${format("%s-%s-readonly-switch-role", var.project_name, var.env)}"
   path   = "/"
   policy = "${data.aws_iam_policy_document.assume_readonly_role_policy.json}"
+}
+
+
+#----------------------------------------------
+# Add users to groups
+#----------------------------------------------
+resource "aws_iam_group_membership" "eks_cluster_admin_group_membership" {
+  name = "${format("%s-%s-admin-membership", var.project_name, var.env)}"
+
+  users = "${var.eks_cluster_admin_group_member}"
+
+  group = "${aws_iam_group.eks_cluster_admin_group.name}"
+}
+
+resource "aws_iam_group_membership" "eks_cluster_readonly_group_membership" {
+  name = "${format("%s-%s-readonly-membership", var.project_name, var.env)}"
+
+  users = "${var.eks_cluster_readonly_group_member}"
+
+  group = "${aws_iam_group.eks_cluster_readonly_group.name}"
 }
