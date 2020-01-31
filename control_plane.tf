@@ -14,6 +14,8 @@ resource "aws_eks_cluster" "master" {
   }
 
   depends_on = ["aws_cloudwatch_log_group.eks_master_log"]
+
+  tags = "${local.control_plane_cluster_group_tags}"
 }
 
 # Logging

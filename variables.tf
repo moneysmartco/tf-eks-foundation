@@ -26,14 +26,14 @@ variable "cluster_role_max_session_duration" {
 
 variable "eks_cluster_admin_group_member" {
   description = "Users that will be added to the group to grant admin access to kubectl"
-  type = "list"
-  default = []
+  type        = "list"
+  default     = []
 }
 
 variable "eks_cluster_readonly_group_member" {
-  description = "Users that will be added to the group to grant readonly access to kubectl" 
-  type = "list"
-  default = []
+  description = "Users that will be added to the group to grant readonly access to kubectl"
+  type        = "list"
+  default     = []
 }
 
 #----------------------
@@ -100,6 +100,11 @@ locals {
     "kubernetes.io/cluster/${var.project_name}-${var.env}" = "owned"
   }
 
+  # EKS cluster name tag in map structure
+  control_plane_cluster_name_tag = {
+    Name = "${var.project_name}-${var.env}"
+  }
+
   # ec2 security group name tag in map structure
   control_plane_security_group_name_tag = {
     Name = "${var.project_name}-${var.env}-eks-control-plane-sg"
@@ -114,6 +119,7 @@ locals {
   #------------------------------------------------------------
   cloudwatch_log_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag)}"
 
+  control_plane_cluster_group_tags  = "${merge(var.tags, local.k8s_tag, local.env_tag, local.control_plane_cluster_name_tag)}"
   control_plane_security_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag, local.control_plane_security_group_name_tag)}"
   worker_node_security_group_tags   = "${merge(var.tags, local.k8s_tag, local.env_tag, local.worker_node_security_group_name_tag)}"
 }
