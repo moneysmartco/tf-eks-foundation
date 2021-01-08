@@ -9,15 +9,23 @@ variable "env" {
   default = ""
 }
 
-variable "vpc_id" {}
-variable "private_subnet_ids" {}
-variable "public_subnet_ids" {}
-variable "bastion_security_gp" {}
+variable "vpc_id" {
+}
+
+variable "private_subnet_ids" {
+}
+
+variable "public_subnet_ids" {
+}
+
+variable "bastion_security_gp" {
+}
 
 #------------------------------------------
 # Cluster IAM Roles for access
 #------------------------------------------
-variable "aws_account_id" {}
+variable "aws_account_id" {
+}
 
 variable "cluster_role_max_session_duration" {
   description = "Session duration for STS token accessing EKS cluster (default: 12 hours)"
@@ -26,13 +34,13 @@ variable "cluster_role_max_session_duration" {
 
 variable "eks_cluster_admin_group_member" {
   description = "Users that will be added to the group to grant admin access to kubectl"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 
 variable "eks_cluster_readonly_group_member" {
   description = "Users that will be added to the group to grant readonly access to kubectl"
-  type        = "list"
+  type        = list(string)
   default     = []
 }
 
@@ -92,7 +100,7 @@ variable "tags" {
 locals {
   # env tag in map structure
   env_tag = {
-    Environment = "${var.env}"
+    Environment = var.env
   }
 
   # AWS-required k8s tag in map structure
@@ -117,9 +125,25 @@ locals {
   #------------------------------------------------------------
   # variables that will be mapped to the various resource block
   #------------------------------------------------------------
-  cloudwatch_log_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag)}"
+  cloudwatch_log_group_tags = merge(var.tags, local.k8s_tag, local.env_tag)
 
-  control_plane_cluster_group_tags  = "${merge(var.tags, local.k8s_tag, local.env_tag, local.control_plane_cluster_name_tag)}"
-  control_plane_security_group_tags = "${merge(var.tags, local.k8s_tag, local.env_tag, local.control_plane_security_group_name_tag)}"
-  worker_node_security_group_tags   = "${merge(var.tags, local.k8s_tag, local.env_tag, local.worker_node_security_group_name_tag)}"
+  control_plane_cluster_group_tags = merge(
+    var.tags,
+    local.k8s_tag,
+    local.env_tag,
+    local.control_plane_cluster_name_tag,
+  )
+  control_plane_security_group_tags = merge(
+    var.tags,
+    local.k8s_tag,
+    local.env_tag,
+    local.control_plane_security_group_name_tag,
+  )
+  worker_node_security_group_tags = merge(
+    var.tags,
+    local.k8s_tag,
+    local.env_tag,
+    local.worker_node_security_group_name_tag,
+  )
 }
+
