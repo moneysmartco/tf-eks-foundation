@@ -95,7 +95,8 @@
         "waf-regional:GetWebACLForResource",
         "waf-regional:GetWebACL",
         "waf-regional:AssociateWebACL",
-        "waf-regional:DisassociateWebACL"
+        "waf-regional:DisassociateWebACL",
+        "wafv2:GetWebACLForResource"
       ],
       "Resource": "*"
     },
