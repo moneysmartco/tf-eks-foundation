@@ -60,7 +60,6 @@ variable "eks_master_endpoint_public_access" {
 }
 
 variable "eks_master_platform_version" {
-  default = "1.13"
 }
 
 #----------------------
