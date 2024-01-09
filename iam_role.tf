@@ -36,7 +36,6 @@ resource "aws_iam_role_policy_attachment" "eks_service" {
   role       = aws_iam_role.eks_control_plane.name
 }
 
-
 #------------------------------------------
 # Worker Node IAM role
 #------------------------------------------
